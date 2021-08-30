@@ -31,9 +31,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "12.x"
-          
-      - name: install yarn
-        run: npm install -g yarn
       
       - uses: actions/cache@v2
         id: yarn-cache
