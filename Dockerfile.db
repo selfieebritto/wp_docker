@@ -10,7 +10,7 @@ ENV MYSQL_USER=exampleuser \
 COPY exampledb.sql /docker-entrypoint-initdb.d/
 
 RUN ["/usr/local/bin/docker-entrypoint.sh", "mysqld", "--datadir", "/initialized-db"]
-
+#-------------
 FROM mysql:5.7
 
 COPY --from=builder /initialized-db /var/lib/mysql
