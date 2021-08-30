@@ -20,14 +20,31 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      
+      - uses: actions/setup-node@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          node-version: "12.x"
+          
+      - name: install yarn
+        run: npm install -g yarn
+      
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            **/node_modules
+            **/.eslintcache
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install packages
+        run: yarn install --frozen-lockfile
 
       - name: Install packages
         if: steps.yarn-cache.outputs.cache-hit != 'true'
